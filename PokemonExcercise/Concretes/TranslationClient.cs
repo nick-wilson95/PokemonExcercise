@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace PokemonExcercise.Concretes
 {
-    public class TranslatorClient : ITranslatorClient
+    public class TranslationClient : ITranslationClient
     {
         private const string Url = "https://api.funtranslations.com";
 
@@ -20,7 +20,18 @@ namespace PokemonExcercise.Concretes
             using var client = new HttpClient();
             var result = await client.GetAsync(uri);
 
-            var translation = await JsonSerializer.DeserializeAsync<TranslationResponse>(await result.Content.ReadAsStreamAsync());
+            if (!result.IsSuccessStatusCode)
+            {
+                // Log the status code and message here
+
+                return new TranslationResponse {
+                    Success = new SuccessContents { Total = 0 }
+                };
+            }
+
+            var responseString = await result.Content.ReadAsStringAsync();
+
+            var translation = JsonSerializer.Deserialize<TranslationResponse>(responseString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
 
             return translation;
         }

@@ -23,7 +23,11 @@ namespace PokemonExcercise
             services.AddControllers();
 
             services.AddTransient<IPokemonService, PokemonService>();
-            services.AddTransient<ITranslatorClient, TranslatorClient>();
+            services.AddTransient<IPokeApiClient, PokeApiClientWrapper>();
+            services.AddTransient<ITranslationService, TranslationService>();
+            services.AddTransient<ITranslationClient, TranslationClient>();
+
+            services.AddSwaggerGen();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -35,6 +39,14 @@ namespace PokemonExcercise
             }
 
             app.UseHttpsRedirection();
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Pokemon API V1");
+                c.RoutePrefix = string.Empty;
+            });
 
             app.UseRouting();
 

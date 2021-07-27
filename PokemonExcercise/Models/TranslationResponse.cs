@@ -2,8 +2,13 @@
 {
     public class TranslationResponse
     {
-        public bool Success { get; set; }
+        public SuccessContents Success { get; set; }
         public TranslationContents Contents { get; set; }
+    }
+
+    public class SuccessContents
+    {
+        public int Total { get; set; }
     }
 
     public class TranslationContents

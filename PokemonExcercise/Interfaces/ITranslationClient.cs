@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace PokemonExcercise.Interfaces
 {
-    public interface ITranslatorClient
+    public interface ITranslationClient
     {
         Task<TranslationResponse> Translate(Language targetLanguage, string input);
     }
