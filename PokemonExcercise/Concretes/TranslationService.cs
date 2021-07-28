@@ -19,7 +19,7 @@ namespace PokemonExcercise.Concretes
                 ? Enumerations.Language.Yoda
                 : Enumerations.Language.Shakespeare;
 
-            var translation = await translatorClient.Translate(targetLanguage, description);
+            var translation = await translatorClient.Translate(description, targetLanguage);
 
             return translation.Success.Total > 0
                 ? translation.Contents.Translated

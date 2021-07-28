@@ -33,22 +33,22 @@ namespace PokemonExcercise.Tests
             mockTranslationService = new Mock<ITranslationService>();
         }
 
+        [Fact]
+        public async void Get_WhenTranslateDescriptionFalse_DoesntCallTranslationService()
+        {
+            await Service.Get("test");
+
+            mockTranslationService.Verify(x => x.GetTranslatedDescription(It.IsAny<PokemonSpecies>(), It.IsAny<string>()), Times.Never);
+        }
+
         public PokemonService Service => new PokemonService(mockPokeApiClient.Object, mockTranslationService.Object);
 
         [Fact]
-        public async void GetByName_WhenTranslateDescriptionTrue_CallsTranslationService()
+        public async void GetTranslated_WhenTranslateDescriptionTrue_CallsTranslationService()
         {
-            await Service.GetByName("test", true);
+            await Service.GetTranslated("test");
 
             mockTranslationService.Verify(x => x.GetTranslatedDescription(It.IsAny<PokemonSpecies>(), It.IsAny<string>()), Times.Once);
-        }
-
-        [Fact]
-        public async void GetByName_WhenTranslateDescriptionFalse_DoesntCallTranslationService()
-        {
-            await Service.GetByName("test", false);
-
-            mockTranslationService.Verify(x => x.GetTranslatedDescription(It.IsAny<PokemonSpecies>(), It.IsAny<string>()), Times.Never);
         }
     }
 }

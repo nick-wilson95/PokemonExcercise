@@ -5,6 +5,7 @@ namespace PokemonExcercise.Interfaces
 {
     public interface IPokemonService
     {
-        Task<DomainResponse<PokemonResponse>> GetByName(string name, bool translateDescription);
+        Task<DomainResponse<PokemonResponse>> Get(string name);
+        Task<DomainResponse<PokemonResponse>> GetTranslated(string name);
     }
 }

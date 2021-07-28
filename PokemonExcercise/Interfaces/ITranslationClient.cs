@@ -6,6 +6,6 @@ namespace PokemonExcercise.Interfaces
 {
     public interface ITranslationClient
     {
-        Task<TranslationResponse> Translate(Language targetLanguage, string input);
+        Task<TranslationResponse> Translate(string input, Language targetLanguage);
     }
 }

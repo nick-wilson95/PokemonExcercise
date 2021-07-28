@@ -17,25 +17,37 @@ namespace PokemonExcercise.Concretes
             this.translationService = translationService;
         }
 
-        public async Task<DomainResponse<PokemonResponse>> GetByName(string name, bool translateDescription)
+        public async Task<DomainResponse<PokemonResponse>> Get(string name) => await GetByName(name, false);
+
+        public async Task<DomainResponse<PokemonResponse>> GetTranslated(string name) => await GetByName(name, true);
+
+        private async Task<DomainResponse<PokemonResponse>> GetByName(string name, bool translateDescription)
         {
             try
             {
                 var species = await pokeApiClient.GetPokemonSpeciesByName(name);
 
-                var description = species.FlavorTextEntries.FirstOrDefault(x => x.Language.Name == "en")?.FlavorText
+                var description = species.FlavorTextEntries.FirstOrDefault(x => x.Language.Name == "en")?
+                    .FlavorText
                     .Replace("\n", " ")
                     .Replace("\f", " ");
 
-                if (description != null && translateDescription) description = await translationService.GetTranslatedDescription(species, description);
+                if (description != null && translateDescription)
+                {
+                    description = await translationService.GetTranslatedDescription(species, description);
+                }
 
-                var pokemonResponse = new PokemonResponse(species.Name, description, species.Habitat.Name, species.IsLegendary);
+                var pokemonResponse = new PokemonResponse(
+                    species.Name,
+                    description,
+                    species.Habitat.Name,
+                    species.IsLegendary
+                );
 
                 return new DomainResponse<PokemonResponse> { Result = pokemonResponse };
             }
             catch
             {
-                // Log the error here
                 return new DomainResponse<PokemonResponse> { Status = Status.Failed };
             }
         }

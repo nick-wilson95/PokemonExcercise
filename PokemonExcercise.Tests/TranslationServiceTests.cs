@@ -10,7 +10,7 @@ namespace PokemonExcercise.Tests
 {
     public class TranslationServiceTests
     {
-        private TranslationResponse testTranslationResponse = new TranslationResponse
+        private readonly TranslationResponse testTranslationResponse = new TranslationResponse
         {
             Success = new SuccessContents { Total = 1 },
             Contents = new TranslationContents { Translated = "" }
@@ -23,7 +23,7 @@ namespace PokemonExcercise.Tests
         public async void GetTranslatedDescription_UsesCorrectTranslator(bool isLegendary, string habitat, Language expectedTargetLanguage)
         {
             var mockTranslationClient = new Mock<ITranslationClient>();
-            mockTranslationClient.Setup(x => x.Translate(It.IsAny<Language>(), It.IsAny<string>()))
+            mockTranslationClient.Setup(x => x.Translate(It.IsAny<string>(), It.IsAny<Language>()))
                 .ReturnsAsync(testTranslationResponse);
 
             var service = new TranslationService(mockTranslationClient.Object);
@@ -32,8 +32,8 @@ namespace PokemonExcercise.Tests
 
             await service.GetTranslatedDescription(species, "test");
 
-            mockTranslationClient.Verify(x => x.Translate(It.IsAny<Language>(), It.IsAny<string>()), Times.Once);
-            mockTranslationClient.Verify(x => x.Translate(expectedTargetLanguage, It.IsAny<string>()), Times.Once);
+            mockTranslationClient.Verify(x => x.Translate(It.IsAny<string>(), It.IsAny<Language>()), Times.Once);
+            mockTranslationClient.Verify(x => x.Translate(It.IsAny<string>(), expectedTargetLanguage), Times.Once);
         }
     }
 }

@@ -20,7 +20,7 @@ namespace PokemonExcercise.Controllers
         [HttpGet("{name}")]
         public async Task<ActionResult<PokemonResponse>> Get(string name)
         {
-            var result = await pokemonService.GetByName(name, false);
+            var result = await pokemonService.Get(name);
 
             if (result.Status == Status.Succeeded) return result.Result;
 
@@ -30,7 +30,7 @@ namespace PokemonExcercise.Controllers
         [HttpGet("translated/{name}")]
         public async Task<ActionResult<PokemonResponse>> GetTranslated(string name)
         {
-            var result = await pokemonService.GetByName(name, true);
+            var result = await pokemonService.GetTranslated(name);
 
             if (result.Status == Status.Succeeded) return result.Result;
 

@@ -6,10 +6,16 @@ namespace PokemonExcercise.Concretes
 {
     public class PokeApiClientWrapper : IPokeApiClient
     {
+        private readonly PokeApiClient pokeApiClient;
+
+        public PokeApiClientWrapper()
+        {
+            pokeApiClient = new PokeApiClient();
+        }
+
         public async Task<PokemonSpecies> GetPokemonSpeciesByName(string name)
         {
-            PokeApiClient pokeClient = new PokeApiClient();
-            return await pokeClient.GetResourceAsync<PokemonSpecies>(name);
+            return await pokeApiClient.GetResourceAsync<PokemonSpecies>(name);
         }
     }
 }

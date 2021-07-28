@@ -12,7 +12,7 @@ namespace PokemonExcercise.Concretes
     {
         private const string Url = "https://api.funtranslations.com";
 
-        public async Task<TranslationResponse> Translate(Language targetLanguage, string input)
+        public async Task<TranslationResponse> Translate(string input, Language targetLanguage)
         {
             var encodedInput = Uri.EscapeUriString(input);
             var uri = $"{Url}/translate/{targetLanguage.ToString()}.json?text={encodedInput}";
@@ -22,8 +22,6 @@ namespace PokemonExcercise.Concretes
 
             if (!result.IsSuccessStatusCode)
             {
-                // Log the status code and message here
-
                 return new TranslationResponse {
                     Success = new SuccessContents { Total = 0 }
                 };
@@ -31,7 +29,10 @@ namespace PokemonExcercise.Concretes
 
             var responseString = await result.Content.ReadAsStringAsync();
 
-            var translation = JsonSerializer.Deserialize<TranslationResponse>(responseString, new JsonSerializerOptions { PropertyNameCaseInsensitive = true });
+            var translation = JsonSerializer.Deserialize<TranslationResponse>(
+                responseString,
+                new JsonSerializerOptions { PropertyNameCaseInsensitive = true }
+            );
 
             return translation;
         }
